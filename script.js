@@ -46,8 +46,8 @@ function updateSavedColumns() {
   arrayNames.forEach((arrayName, index) => {
     localStorage.setItem(`${arrayName}Items`, JSON.stringify(listArrays[index]));
   });
-//same work
-   // localStorage.setItem('backlogItems', JSON.stringify(backlogListArray));
+  //same work
+  // localStorage.setItem('backlogItems', JSON.stringify(backlogListArray));
   // localStorage.setItem('progressItems', JSON.stringify(progressListArray));
   // localStorage.setItem('completeItems', JSON.stringify(completeListArray));
   // localStorage.setItem('onHoldItems', JSON.stringify(onHoldListArray));
@@ -129,7 +129,7 @@ function addToColumn(column) {
   const selectedArray = listArrays[column];
   selectedArray.push(itemText);
   addItems[column].textContent = '';
-  updateDOM(column);
+  updateDOM();
 }
 
 // Show Add Item Input Box
@@ -144,7 +144,15 @@ function hideInputBox(column) {
   addBtns[column].style.visibility = 'visible';
   saveItemBtns[column].style.display = 'none';
   addItemContainers[column].style.display = 'none';
-  addToColumn(column);
+  
+  
+  //don't save the empty row //mis
+  const itemText = addItems[column].textContent;
+  if (itemText != '') {
+    addToColumn(column);
+  }else {
+    alert("Empty add box");
+  }
 }
 
 // Allows arrays to reflect Drag and Drop items//sakil:copy the drap drop array now to local storage.
@@ -171,6 +179,10 @@ function rebuildArrays() {
 // When Item Enters Column Area
 function dragEnter(column) {
   listColumns[column].classList.add('over');
+  //if move the note different column then remove the background // mis
+  if (column != currentColumn) {
+    removeColumnBackground()
+  }
   currentColumn = column;
 }
 
@@ -178,6 +190,7 @@ function dragEnter(column) {
 function drag(e) {
   draggedItem = e.target;
   dragging = true;
+
 }
 
 // Column Allows for Item to Drop
@@ -190,14 +203,20 @@ function drop(e) {
   e.preventDefault();
   const parent = listColumns[currentColumn];
   // Remove Background Color/Padding
-  listColumns.forEach((column) => {
-    column.classList.remove('over');
-  });
+  removeColumnBackground()
   // Add item to Column
   parent.appendChild(draggedItem);
   // Dragging complete
   dragging = false;
   rebuildArrays();
+}
+
+//this funtion remove background and padding //mis
+function removeColumnBackground() {
+  // Remove Background Color/Padding
+  listColumns.forEach((column) => {
+    column.classList.remove('over');
+  });
 }
 
 // On Load
