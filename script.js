@@ -66,6 +66,8 @@ function createItemEl(columnEl, column, item, index) {
   listEl.textContent = item;
   listEl.id = index;
   listEl.classList.add('drag-item');
+  // add for delete function
+  listEl.setAttribute('ondblclick', `deleteItem(${index}, ${column})`);
   listEl.draggable = true;
   listEl.setAttribute('onfocusout', `updateItem(${index}, ${column})`);
   listEl.setAttribute('ondragstart', 'drag(event)');
@@ -122,7 +124,20 @@ function updateItem(id, column) {
     updateDOM();
   }
 }
-
+// delete Function
+function deleteItem(id, column) {
+  const selectedArray = listArrays[column];
+  const selectedColumn = listColumns[column].children;
+  if (!dragging) {
+    if (selectedColumn[id].textContent) {
+      // empty item
+      selectedColumn[id].textContent = '';
+      updateItem(id, column);
+    } else {
+      alert("Empty item cannot be deleted");
+    }
+  }
+}
 // Add to Column List, Reset Textbox
 function addToColumn(column) {
   const itemText = addItems[column].textContent;
@@ -155,7 +170,7 @@ function hideInputBox(column) {
   }
 }
 
-// Allows arrays to reflect Drag and Drop items//sakil:copy the drap drop array now to local storage.
+// Allows arrays to reflect Drag and Drop items//sakil:copy the drag drop array now to local storage.
 function rebuildArrays() {
   backlogListArray = [];
   for (let i = 0; i < backlogListEl.children.length; i++) {
@@ -224,3 +239,12 @@ updateDOM();
 
 //testing
 // console.log(listColumns[0].childNodes[0].textContent)
+
+// Show user guide for 5 seconds after page load
+window.onload = function() {
+  const userGuide = document.querySelector('.user-guide');
+  userGuide.style.display = 'block';
+  setTimeout(() => {
+    userGuide.style.display = 'none';
+  }, 5000);
+};

@@ -140,6 +140,7 @@ ul {
   cursor: pointer;
 }
 
+
 .drag-item:focus {
   outline: none;
   background-color: white;
@@ -213,6 +214,18 @@ ul {
 
 .add-item:focus {
   outline: none;
+}
+.user-guide {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
 /* Media Query: Laptop */
